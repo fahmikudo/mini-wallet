@@ -3,7 +3,6 @@ package io.fahmikudo.wallet.controller;
 import io.fahmikudo.wallet.exception.HttpException;
 import io.fahmikudo.wallet.model.request.UserRegistrationRequest;
 import io.fahmikudo.wallet.model.response.UserRegistrationResponse;
-import io.fahmikudo.wallet.security.SecurityUtils;
 import io.fahmikudo.wallet.model.BaseResponse;
 import io.fahmikudo.wallet.service.UserService;
 import io.fahmikudo.wallet.util.controller.BaseController;
@@ -23,14 +22,12 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class UserController extends BaseController {
 
-    private final SecurityUtils securityUtils;
     private final UserService userService;
 
     private BaseResponse response;
 
-    public UserController(UserService userService, SecurityUtils securityUtils) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.securityUtils = securityUtils;
     }
 
     @PostMapping("/register")

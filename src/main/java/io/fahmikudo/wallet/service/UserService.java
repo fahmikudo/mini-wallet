@@ -8,6 +8,6 @@ import java.security.NoSuchAlgorithmException;
 
 public interface UserService {
 
-    UserRegistrationResponse userRegistration(UserRegistrationRequest req) throws NoSuchAlgorithmException, HttpException;
+    UserRegistrationResponse userRegistration(UserRegistrationRequest req) throws HttpException;
 
 }

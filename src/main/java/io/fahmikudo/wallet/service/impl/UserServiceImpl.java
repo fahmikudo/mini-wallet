@@ -7,12 +7,13 @@ import io.fahmikudo.wallet.model.response.UserRegistrationResponse;
 import io.fahmikudo.wallet.repository.UserRepository;
 import io.fahmikudo.wallet.service.AuthService;
 import io.fahmikudo.wallet.service.UserService;
+import io.fahmikudo.wallet.validator.UserValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.NoSuchAlgorithmException;
 
 @Service
 @Slf4j
@@ -24,15 +25,22 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, AuthService authService, PasswordEncoder passwordEncoder){
+    private final UserValidator userValidator;
+
+    public UserServiceImpl(UserRepository userRepository, AuthService authService, PasswordEncoder passwordEncoder, UserValidator userValidator){
         this.userRepository = userRepository;
         this.authService = authService;
         this.passwordEncoder = passwordEncoder;
+        this.userValidator = userValidator;
     }
 
     @Override
     @Transactional
-    public UserRegistrationResponse userRegistration(UserRegistrationRequest req) throws NoSuchAlgorithmException, HttpException {
+    public UserRegistrationResponse userRegistration(UserRegistrationRequest req) throws HttpException {
+        String validation = userValidator.userRegistrationValidator(req);
+        if (validation != null) {
+            throw new HttpException(validation, HttpStatus.BAD_REQUEST);
+        }
         var user = User.builder()
                 .firstName(req.getFirstName())
                 .lastName(req.getLastName())
