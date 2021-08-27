@@ -64,8 +64,7 @@ public class AuthServiceImpl implements AuthService {
         if (inputPassword.matches(user.get().getPassword())) {
             throw new HttpException("Password does not match", HttpStatus.BAD_REQUEST);
         }
-        var authResponse = auth(user.get());
-        return authResponse;
+        return auth(user.get());
     }
 
     private long getExpRefreshToken(Long day) {

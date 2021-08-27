@@ -20,8 +20,7 @@ public class CommonFunction {
         Random random = new Random();
         Integer randomNumber = random.nextInt(9999);
         SimpleDateFormat df = new SimpleDateFormat("ddMMyyhhmm");
-        String orderNo = String.format("%s%04d", df.format(new Date()), randomNumber);
-        return orderNo;
+        return String.format("%s%04d", df.format(new Date()), randomNumber);
     }
 
 }

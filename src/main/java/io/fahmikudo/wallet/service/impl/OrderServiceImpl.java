@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("order_date"));
         Page<Order> orders = orderRepository.findByUserAndIsDeleted(user, pageable, false);
         List<OrderDetailResponse> orderDetailResponses = new ArrayList<>();
-        if (orders.isEmpty() || orders == null) {
+        if (orders.isEmpty()) {
             return orderDetailResponses;
         }
         for (Order order : orders.getContent()){
