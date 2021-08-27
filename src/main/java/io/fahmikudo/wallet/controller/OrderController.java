@@ -8,6 +8,7 @@ import io.fahmikudo.wallet.model.response.OrderDetailResponse;
 import io.fahmikudo.wallet.model.response.OrderProductResponse;
 import io.fahmikudo.wallet.model.response.OrderTopUpResponse;
 import io.fahmikudo.wallet.service.OrderService;
+import io.fahmikudo.wallet.service.OrderServicePayment;
 import io.fahmikudo.wallet.service.OrderServiceProduct;
 import io.fahmikudo.wallet.service.OrderServiceTopUpBalance;
 import io.fahmikudo.wallet.util.controller.BaseController;
@@ -34,10 +35,13 @@ public class OrderController extends BaseController {
 
     private final OrderService orderService;
 
-    public OrderController(OrderServiceTopUpBalance orderTopUpService, OrderServiceProduct orderProductService, OrderService orderService) {
+    private final OrderServicePayment orderServicePayment;
+
+    public OrderController(OrderServiceTopUpBalance orderTopUpService, OrderServiceProduct orderProductService, OrderService orderService, OrderServicePayment orderServicePayment) {
         this.orderTopUpService = orderTopUpService;
         this.orderProductService = orderProductService;
         this.orderService = orderService;
+        this.orderServicePayment = orderServicePayment;
     }
 
     @PostMapping("/top-up-balance")
@@ -113,6 +117,26 @@ public class OrderController extends BaseController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/payment/{order_no}")
+    public ResponseEntity<BaseResponse> orderPayment(@PathVariable("order_no") String orderNo){
+        try {
+            var user = getUserActiveFromContext();
+            Boolean res = orderServicePayment.payment(user, orderNo);
+            response = new BaseResponse(OK.value(), BaseController.SUCCESS, res);
+
+            return new ResponseEntity<>(response, OK);
+        } catch (HttpException e) {
+            log.error(e.getMessage());
+            response = getError(e.getHttpStatus(), e.getMessage());
+            return new ResponseEntity<>(response, e.getHttpStatus());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response = getError(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }
