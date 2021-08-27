@@ -9,6 +9,7 @@ import io.fahmikudo.wallet.security.jwt.JwtConfig;
 import io.fahmikudo.wallet.security.jwt.JwtUtil;
 import io.fahmikudo.wallet.service.AuthService;
 import io.fahmikudo.wallet.validator.AuthValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final JwtUtil jwtUtil;
@@ -55,10 +57,11 @@ public class AuthServiceImpl implements AuthService {
         }
         Optional<User> user = userRepository.findByEmailAndIsDeleted(loginRequest.getEmail(), false);
         String inputPassword = passwordEncoder.encode(loginRequest.getPassword());
+        log.info("Input Password : " +  inputPassword);
         if (user.isEmpty()) {
             throw new HttpException("User not found", HttpStatus.NOT_FOUND);
         }
-        if (!user.get().getPassword().equals(inputPassword)) {
+        if (inputPassword.matches(user.get().getPassword())) {
             throw new HttpException("Password does not match", HttpStatus.BAD_REQUEST);
         }
         var authResponse = auth(user.get());

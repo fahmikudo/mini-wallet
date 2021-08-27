@@ -49,7 +49,6 @@ public class UserServiceImpl implements UserService {
                 .address(req.getAddress())
                 .password(passwordEncoder.encode(req.getPassword()))
                 .isActive(true)
-                .status(User.ACTIVE)
                 .build();
         userRepository.save(user);
         var authResponse = authService.auth(user);
