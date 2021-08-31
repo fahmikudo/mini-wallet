@@ -49,7 +49,7 @@ public class Order extends BaseModel {
     private OrderType orderType;
 
     @Column(name = "order_date")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.DATE)
     private Date orderDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
