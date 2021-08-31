@@ -6,11 +6,9 @@ import io.fahmikudo.wallet.domain.Order;
 import io.fahmikudo.wallet.repository.OrderRepository;
 import io.fahmikudo.wallet.util.domain.OrderStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -32,11 +30,12 @@ public class MessageReceiver {
         log.info("Received message >>> {} | {}", new String(message.getBody()), new Date());
         ObjectMapper objectMapper = new ObjectMapper();
         Order order = objectMapper.readValue(new String(message.getBody()), Order.class);
-        Optional<Order> getOrder = orderRepository.findByOrderNoAndIsDeleted(order.getOrderNo(), false);
+        Optional<Order> getOrder = orderRepository.findByOrderNoAndStatusAndIsDeleted(order.getOrderNo(), OrderStatus.SUCCESS, false);
         if (getOrder.isPresent()) {
             order.setStatus(OrderStatus.CANCELLED);
+            order.setUser(getOrder.get().getUser());
             order.setUpdatedBy(getOrder.get().getUser().getFirstName());
-            orderRepository.save(order);
+            orderRepository.saveAndFlush(order);
         }
     }
 

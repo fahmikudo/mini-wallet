@@ -27,6 +27,8 @@ public class OrderServicePaymentImpl implements OrderServicePayment {
             throw new HttpException("Order not found", HttpStatus.BAD_REQUEST);
         }
         order.get().setStatus(OrderStatus.PAID);
+        order.get().setUpdatedBy(user.getFirstName());
+        order.get().setUser(user);
         orderRepository.save(order.get());
         return Boolean.TRUE;
     }

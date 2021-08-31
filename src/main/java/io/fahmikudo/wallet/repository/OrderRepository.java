@@ -2,6 +2,7 @@ package io.fahmikudo.wallet.repository;
 
 import io.fahmikudo.wallet.domain.Order;
 import io.fahmikudo.wallet.domain.User;
+import io.fahmikudo.wallet.util.domain.OrderStatus;
 import io.fahmikudo.wallet.util.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends BaseRepository<Order> {
+
+    Optional<Order> findByOrderNoAndStatusAndIsDeleted(String orderNo, OrderStatus orderStatus, boolean isDeleted);
 
     Optional<Order> findByOrderNoAndIsDeleted(String orderNo, boolean isDeleted);
 

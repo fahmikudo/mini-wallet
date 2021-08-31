@@ -28,14 +28,14 @@ public class RabbitMQConfig {
 
     @Bean
     Queue queue() {
-        return new Queue(queueName, true, false, true);
+        return new Queue(queueName, true, false, false);
     }
 
     @Bean
     Exchange exchange() {
         Map<String, Object> args = new HashMap<String, Object>();
         args.put("x-delayed-type", "direct");
-        return new CustomExchange(exchange, "x-delayed-message", true, true, args);
+        return new CustomExchange(exchange, "x-delayed-message", true, false, args);
     }
 
     @Bean

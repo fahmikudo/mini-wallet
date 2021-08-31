@@ -1,5 +1,6 @@
 package io.fahmikudo.wallet.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.fahmikudo.wallet.domain.Order;
 import io.fahmikudo.wallet.domain.User;
 import io.fahmikudo.wallet.exception.HttpException;
@@ -10,6 +11,7 @@ import io.fahmikudo.wallet.service.OrderServiceProduct;
 import io.fahmikudo.wallet.util.commonfunction.CommonFunction;
 import io.fahmikudo.wallet.util.domain.OrderStatus;
 import io.fahmikudo.wallet.util.domain.OrderType;
+import io.fahmikudo.wallet.util.service.MessageSender;
 import io.fahmikudo.wallet.validator.OrderValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,10 +25,12 @@ public class OrderServiceProductImpl implements OrderServiceProduct {
 
     private final OrderRepository orderRepository;
     private final OrderValidator orderValidator;
+    private final MessageSender messageSender;
 
-    public OrderServiceProductImpl(OrderRepository orderRepository, OrderValidator orderValidator) {
+    public OrderServiceProductImpl(OrderRepository orderRepository, OrderValidator orderValidator, MessageSender messageSender) {
         this.orderRepository = orderRepository;
         this.orderValidator = orderValidator;
+        this.messageSender = messageSender;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class OrderServiceProductImpl implements OrderServiceProduct {
     }
 
     @Override
-    public OrderProductResponse orderProduct(User user, OrderProductRequest orderProductRequest) throws HttpException {
+    public OrderProductResponse orderProduct(User user, OrderProductRequest orderProductRequest) throws HttpException, JsonProcessingException {
         String validation = orderValidator.orderProductValidator(orderProductRequest);
         if (validation != null) {
             throw new HttpException(validation, HttpStatus.BAD_REQUEST);
@@ -58,6 +62,7 @@ public class OrderServiceProductImpl implements OrderServiceProduct {
                 .user(user)
                 .build();
         order(orderReq);
+        messageSender.send(orderReq);
         return OrderProductResponse.builder()
                 .orderNo(orderReq.getOrderNo())
                 .productName(orderReq.getProductName())

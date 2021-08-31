@@ -22,7 +22,6 @@ public class BaseModel implements Serializable {
     @Column(name = "created_at", updatable = false)
     protected Date createdAt;
 
-    @Version
     @Column(name = "updated_at")
     protected Date updatedAt;
 

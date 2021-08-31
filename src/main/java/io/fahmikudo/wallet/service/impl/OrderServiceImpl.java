@@ -6,15 +6,12 @@ import io.fahmikudo.wallet.exception.HttpException;
 import io.fahmikudo.wallet.model.response.OrderDetailResponse;
 import io.fahmikudo.wallet.repository.OrderRepository;
 import io.fahmikudo.wallet.service.OrderService;
-import io.fahmikudo.wallet.util.domain.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
