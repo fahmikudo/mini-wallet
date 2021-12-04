@@ -1,5 +1,6 @@
 package io.fahmikudo.wallet.controller;
 
+import io.fahmikudo.wallet.domain.User;
 import io.fahmikudo.wallet.exception.HttpException;
 import io.fahmikudo.wallet.model.BaseResponse;
 import io.fahmikudo.wallet.model.request.OrderProductRequest;
@@ -47,7 +48,7 @@ public class OrderController extends BaseController {
     @PostMapping("/top-up-balance")
     public ResponseEntity<BaseResponse> orderTopUpBalance(@RequestBody OrderTopUpRequest request){
         try {
-            var user = getUserActiveFromContext();
+            User user = getUserActiveFromContext();
             OrderTopUpResponse res = orderTopUpService.orderTopUp(user, request);
             response = new BaseResponse(OK.value(), BaseController.SUCCESS, res);
 
@@ -66,7 +67,7 @@ public class OrderController extends BaseController {
     @PostMapping("/product")
     public ResponseEntity<BaseResponse> orderProduct(@RequestBody OrderProductRequest request){
         try {
-            var user = getUserActiveFromContext();
+            User user = getUserActiveFromContext();
             OrderProductResponse res = orderProductService.orderProduct(user, request);
             response = new BaseResponse(OK.value(), BaseController.SUCCESS, res);
 
@@ -87,7 +88,7 @@ public class OrderController extends BaseController {
                                                  @RequestParam(name = "size", defaultValue = "10") int size){
         try {
             page = page - 1;
-            var user = getUserActiveFromContext();
+            User user = getUserActiveFromContext();
             List<OrderDetailResponse> res = orderService.getOrderDetails(user, page, size);
             response = new BaseResponse(OK.value(), BaseController.SUCCESS, res);
 
@@ -102,7 +103,7 @@ public class OrderController extends BaseController {
     @GetMapping("/order-detail/{order_no}")
     public ResponseEntity<BaseResponse> getOrder(@PathVariable("order_no") String orderNo){
         try {
-            var user = getUserActiveFromContext();
+            User user = getUserActiveFromContext();
             OrderDetailResponse res = orderService.getOrderDetail(user, orderNo);
             response = new BaseResponse(OK.value(), BaseController.SUCCESS, res);
 
@@ -121,7 +122,7 @@ public class OrderController extends BaseController {
     @PostMapping("/payment/{order_no}")
     public ResponseEntity<BaseResponse> orderPayment(@PathVariable("order_no") String orderNo){
         try {
-            var user = getUserActiveFromContext();
+            User user = getUserActiveFromContext();
             Boolean res = orderServicePayment.payment(user, orderNo);
             response = new BaseResponse(OK.value(), BaseController.SUCCESS, res);
 

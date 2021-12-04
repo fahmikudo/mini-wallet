@@ -58,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<User> user = userRepository.findByEmailAndIsDeleted(loginRequest.getEmail(), false);
         String inputPassword = passwordEncoder.encode(loginRequest.getPassword());
         log.info("Input Password : " +  inputPassword);
-        if (user.isEmpty()) {
+        if (!user.isPresent()) {
             throw new HttpException("User not found", HttpStatus.NOT_FOUND);
         }
         if (inputPassword.matches(user.get().getPassword())) {

@@ -14,7 +14,7 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         ObjectMapper mapper = new ObjectMapper();
-        var baseResponse = new BaseResponse();
+        BaseResponse baseResponse = new BaseResponse();
         baseResponse.setStatus(401);
         baseResponse.setMessage("Check your JWT please!");
         baseResponse.setResult(null);

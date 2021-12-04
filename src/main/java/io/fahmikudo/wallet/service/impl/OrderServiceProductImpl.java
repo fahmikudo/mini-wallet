@@ -50,7 +50,7 @@ public class OrderServiceProductImpl implements OrderServiceProduct {
         if (validation != null) {
             throw new HttpException(validation, HttpStatus.BAD_REQUEST);
         }
-        var orderReq = Order.builder()
+        Order orderReq = Order.builder()
                 .orderNo(CommonFunction.setOrderNo())
                 .productName(orderProductRequest.getProductName())
                 .shippingAddress(orderProductRequest.getShippingAddress())

@@ -64,7 +64,7 @@ public class SecurityUtils {
         }
 
         user = userRepository.findById(userId);
-        if (user.isEmpty()) {
+        if (!user.isPresent()) {
             throw new UserNotFound("Check your JWT please!");
         }
 

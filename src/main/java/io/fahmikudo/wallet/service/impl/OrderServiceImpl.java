@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
             return orderDetailResponses;
         }
         for (Order order : orders.getContent()){
-            var orderDetailResponse = new OrderDetailResponse();
+            OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
             orderDetailResponse.setOrderNo(order.getOrderNo());
             orderDetailResponse.setOrderStatus(order.getStatus());
             orderDetailResponse.setOrderDate(order.getOrderDate());
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDetailResponse getOrderDetail(User user, String orderNo) throws HttpException {
         Optional<Order> order = orderRepository.findByOrderNoAndUserAndIsDeleted(orderNo, user, false);
-        if (order.isEmpty()) {
+        if (!order.isPresent()) {
             throw new HttpException("Order not found", HttpStatus.NOT_FOUND);
         }
         return OrderDetailResponse.builder()

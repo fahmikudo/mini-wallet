@@ -50,7 +50,7 @@ public class OrderServiceTopUpBalanceImpl implements OrderServiceTopUpBalance {
         if (validation != null) {
             throw new HttpException(validation, HttpStatus.BAD_REQUEST);
         }
-        var orderReq = Order.builder()
+        Order orderReq = Order.builder()
                 .orderNo(CommonFunction.setOrderNo())
                 .balance(orderTopUpRequest.getBalance())
                 .phone(orderTopUpRequest.getPhone())

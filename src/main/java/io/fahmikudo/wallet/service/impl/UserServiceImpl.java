@@ -3,6 +3,7 @@ package io.fahmikudo.wallet.service.impl;
 import io.fahmikudo.wallet.domain.User;
 import io.fahmikudo.wallet.exception.HttpException;
 import io.fahmikudo.wallet.model.request.UserRegistrationRequest;
+import io.fahmikudo.wallet.model.response.AuthResponse;
 import io.fahmikudo.wallet.model.response.UserRegistrationResponse;
 import io.fahmikudo.wallet.repository.UserRepository;
 import io.fahmikudo.wallet.service.AuthService;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
         if (validation != null) {
             throw new HttpException(validation, HttpStatus.BAD_REQUEST);
         }
-        var user = User.builder()
+        User user = User.builder()
                 .firstName(req.getFirstName())
                 .lastName(req.getLastName())
                 .email(req.getEmail())
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
                 .isActive(true)
                 .build();
         userRepository.save(user);
-        var authResponse = authService.auth(user);
+        AuthResponse authResponse = authService.auth(user);
         return new UserRegistrationResponse(authResponse.getToken(), authResponse.getRefreshToken());
     }
 }

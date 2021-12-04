@@ -23,7 +23,7 @@ public class OrderServicePaymentImpl implements OrderServicePayment {
     @Override
     public Boolean payment(User user, String orderNo) throws HttpException {
         Optional<Order> order = orderRepository.findByOrderNoAndIsDeleted(orderNo, false);
-        if (order.isEmpty()) {
+        if (!order.isPresent()) {
             throw new HttpException("Order not found", HttpStatus.BAD_REQUEST);
         }
         order.get().setStatus(OrderStatus.PAID);
